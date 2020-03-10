@@ -40,12 +40,11 @@ SIWindowsCommand class >> zipWindowExecutable [
 
 { #category : #'services - file operations' }
 SIWindowsCommand >> copyAll: inputDirectoryFileReference to: targetDirectoryFileReference [
-	"We add a \ character at the end of the target path, so that xcopy does not prompt the user (is it a file or a directory ?)
-	The /Y allows to force overwrite"
+	"see: https://docs.microsoft.com/fr-fr/windows-server/administration/windows-commands/robocopy"
 
 	^ self
-		waitForCommand: 'copy'
-		arguments: { " '/E' . '/Y'" . inputDirectoryFileReference escapedPathForSystemCommand . (targetDirectoryFileReference asAbsolute pathString , '\') escapedPathForSystemCommand}
+		waitForCommand: 'robocopy'
+		arguments: {'/e' . '/s' . inputDirectoryFileReference escapedPathForSystemCommand . targetDirectoryFileReference escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }
