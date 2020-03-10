@@ -27,7 +27,7 @@ BaselineOfSystemInteraction >> baseline: spec [
 			spec
 				group: 'default' with: #('Core');
 				group: 'Core' with: #('SystemInteraction');
-				group: 'TinyLogger' with: #('SystemInteraction-TinyLogger') ]
+				group: 'TinyLoggerIntegration' with: #('SystemInteraction-TinyLogger') ]
 ]
 
 { #category : #dependencies }

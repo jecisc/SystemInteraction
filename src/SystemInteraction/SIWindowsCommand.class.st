@@ -44,13 +44,15 @@ SIWindowsCommand >> copyAll: inputDirectoryFileReference to: targetDirectoryFile
 	The /Y allows to force overwrite"
 
 	^ self
-		waitForCommand: 'xcopy'
-		arguments: {'/E' . '/Y' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand . (targetDirectoryFileReference asAbsolute pathString , '\') escapedPathForSystemCommand}
+		waitForCommand: 'copy'
+		arguments: { " '/E' . '/Y'" . inputDirectoryFileReference escapedPathForSystemCommand . (targetDirectoryFileReference asAbsolute pathString , '\') escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }
 SIWindowsCommand >> deleteAll: inputDirectoryFileReference [
-	^ self waitForCommand: 'rd' arguments: {'/s' . '/q' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand}
+	^ inputDirectoryFileReference isFile
+		ifTrue: [ self waitForCommand: 'del' arguments: {'/s' . '/q' . inputDirectoryFileReference escapedPathForSystemCommand} ]
+		ifFalse: [ self waitForCommand: 'rd' arguments: {'/s' . '/q' . inputDirectoryFileReference escapedPathForSystemCommand} ]
 ]
 
 { #category : #private }
@@ -77,7 +79,7 @@ SIWindowsCommand >> unzip: anArchive to: targetDirectory [
 	command := self systemInteractionResourcesFolder / 'unzip.exe'.
 	command exists ifFalse: [ command binaryWriteStreamDo: [ :s | s nextPutAll: self class unzipWindowExecutable ] ].
 	^ self
-		waitForCommand: command escapePathForSystemCommand
+		waitForCommand: command escapedPathForSystemCommand
 		arguments: {'-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
 ]
 
@@ -90,5 +92,5 @@ SIWindowsCommand >> zip: aCollectionOfFilesOrPath to: aZipArchiveName [
 	arguments := OrderedCollection with: '-roq' with: aZipArchiveName.
 	arguments addAll: (aCollectionOfFilesOrPath collect: #escapedPathForSystemCommand).
 
-	self waitForCommand: command escapePathForSystemCommand arguments: arguments asArray silently: true
+	self waitForCommand: command escapedPathForSystemCommand arguments: arguments asArray silently: true
 ]
