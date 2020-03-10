@@ -27,12 +27,12 @@ SIWindowsCommand >> copyAll: inputDirectoryFileReference to: targetDirectoryFile
 
 	^ self
 		waitForCommand: 'xcopy'
-		arguments: {'/E' . '/Y' . inputDirectoryFileReference asAbsolute escapePathForSystemCommand . (targetDirectoryFileReference asAbsolute pathString , '\') escapePathForSystemCommand}
+		arguments: {'/E' . '/Y' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand . (targetDirectoryFileReference asAbsolute pathString , '\') escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }
 SIWindowsCommand >> deleteAll: inputDirectoryFileReference [
-	^ self waitForCommand: 'rd' arguments: {'/s' . '/q' . inputDirectoryFileReference asAbsolute escapePathForSystemCommand}
+	^ self waitForCommand: 'rd' arguments: {'/s' . '/q' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand}
 ]
 
 { #category : #private }
@@ -45,7 +45,7 @@ SIWindowsCommand >> privateExecuteCommand: aString arguments: aCollection [
 
 { #category : #private }
 SIWindowsCommand >> privateExecuteScriptFile: aFileReference [
-	^ self waitForCommand: aFileReference asAbsolute escapePathForSystemCommand
+	^ self waitForCommand: aFileReference asAbsolute escapedPathForSystemCommand
 ]
 
 { #category : #private }

@@ -175,7 +175,7 @@ SICommand >> executeCommand: aString arguments: aCollection [
 
 	self loggingStrategy
 		execute: [ self privateExecuteCommand: aString arguments: aCollection ]
-		loggedAs: 'Execute command: ' , (self joinCommand: aString withArguments: aCollection)
+		recordedAs: 'Execute command: ' , (self joinCommand: aString withArguments: aCollection)
 ]
 
 { #category : #services }
@@ -276,6 +276,11 @@ SICommand >> scriptExtension [
 	^ self class scriptExtension
 ]
 
+{ #category : #'services - file operations' }
+SICommand >> unzip: anArchive to: targetDirectory [
+	^ self subclassResponsibility
+]
+
 { #category : #services }
 SICommand >> waitForCommand: aString [
 	"Execute a single command and wait for execution to finish"
@@ -299,9 +304,9 @@ SICommand >> waitForCommand: aString arguments: aCollection silently: aBoolean [
 		execute: [ aBoolean
 				ifTrue: [ self privateSilentWaitForCommand: aString arguments: aCollection ]
 				ifFalse: [ result := self privateWaitForCommand: aString arguments: aCollection ] ]
-		loggedAs: 'Execute command: ' , (self joinCommand: aString withArguments: aCollection).
+		recordedAs: 'Execute command: ' , (self joinCommand: aString withArguments: aCollection).
 
-	aBoolean ifFalse: [ self loggingStrategy log: ('Result: ' , result asString ifEmpty: [ 'No result' ]) ].
+	aBoolean ifFalse: [ self loggingStrategy trace: ('Result: ' , result asString ifEmpty: [ 'No result' ]) ].
 	^ result
 ]
 
@@ -310,4 +315,9 @@ SICommand >> waitForCommand: aString silently: aBoolean [
 	"Execute a single command passed as parameter and wait for the exit."
 
 	^ self waitForCommand: aString arguments: #() silently: aBoolean
+]
+
+{ #category : #'services - file operations' }
+SICommand >> zip: aCollectionOfFilesOrPath to: aZipArchiveName [
+	^ self subclassResponsibility
 ]

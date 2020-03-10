@@ -22,12 +22,12 @@ SIUnixCommand class >> scriptExtension [
 
 { #category : #'services - file operations' }
 SIUnixCommand >> copyAll: inputDirectoryFileReference to: targetDirectoryFileReference [
-	^ self waitForCommand: 'cp' arguments: {'-R' . inputDirectoryFileReference asAbsolute escapePathForSystemCommand . targetDirectoryFileReference asAbsolute escapePathForSystemCommand}
+	^ self waitForCommand: 'cp' arguments: {'-R' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand . targetDirectoryFileReference asAbsolute escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }
 SIUnixCommand >> deleteAll: inputDirectoryFileReference [
-	^ self waitForCommand: 'rm' arguments: {'-rf' . inputDirectoryFileReference asAbsolute escapePathForSystemCommand}
+	^ self waitForCommand: 'rm' arguments: {'-rf' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand}
 ]
 
 { #category : #private }
@@ -39,7 +39,7 @@ SIUnixCommand >> privateExecuteCommand: aString arguments: aCollection [
 
 { #category : #private }
 SIUnixCommand >> privateExecuteScriptFile: aFileReference [
-	^ self waitForCommand: 'sh' arguments: {aFileReference asAbsolute escapePathForSystemCommand}
+	^ self waitForCommand: 'sh' arguments: {aFileReference asAbsolute escapedPathForSystemCommand}
 ]
 
 { #category : #private }
@@ -56,4 +56,18 @@ SIUnixCommand >> privateWaitForCommand: aString arguments: aCollection [
 		redirectStdout;
 		redirectStderr;
 		runAndWaitPollingEvery: (Delay forMilliseconds: 50) retrievingStreams: true onExitDo: [ :process :out :err | ^ out ]
+]
+
+{ #category : #'services - file operations' }
+SIUnixCommand >> unzip: anArchive to: targetDirectory [
+	self waitForCommand: 'unzip' arguments: {'-q' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand} silently: true
+]
+
+{ #category : #'services - file operations' }
+SIUnixCommand >> zip: aCollectionOfFilesOrPath to: aZipArchiveName [
+	| arguments |
+	arguments := OrderedCollection with: '-roq' with: aZipArchiveName.
+	arguments addAll: (aCollectionOfFilesOrPath collect: #escapedPathForSystemCommand).
+
+	self waitForCommand: 'zip' arguments: arguments asArray silently: true
 ]
