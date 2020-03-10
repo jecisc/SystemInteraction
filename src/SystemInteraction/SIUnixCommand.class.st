@@ -27,7 +27,7 @@ SIUnixCommand >> copyAll: inputDirectoryFileReference to: targetDirectoryFileRef
 
 { #category : #'services - file operations' }
 SIUnixCommand >> deleteAll: inputDirectoryFileReference [
-	^ self waitForCommand: 'rm' arguments: {'-rf' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand}
+	^ self waitForCommand: 'rm' arguments: {'-rf' . inputDirectoryFileReference escapedPathForSystemCommand}
 ]
 
 { #category : #private }
@@ -60,7 +60,7 @@ SIUnixCommand >> privateWaitForCommand: aString arguments: aCollection [
 
 { #category : #'services - file operations' }
 SIUnixCommand >> unzip: anArchive to: targetDirectory [
-	self waitForCommand: 'unzip' arguments: {'-q' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand} silently: true
+	^ self waitForCommand: 'unzip' arguments: {'-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }

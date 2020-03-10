@@ -124,6 +124,11 @@ SICommand class >> startUp: booting [
 	self resetDefault
 ]
 
+{ #category : #'as yet unclassified' }
+SICommand class >> systemInteractionResourcesFolder [
+	^ 'SystemInteractionResources' asFileReference ensureCreateDirectory
+]
+
 { #category : #services }
 SICommand class >> waitForCommand: aString [
 	"Execute a single command without argument and wait for execution to finish"
@@ -274,6 +279,11 @@ SICommand >> privateWaitForCommand: aString arguments: aCollection [
 { #category : #accessing }
 SICommand >> scriptExtension [
 	^ self class scriptExtension
+]
+
+{ #category : #accessing }
+SICommand >> systemInteractionResourcesFolder [
+	^ self class systemInteractionResourcesFolder
 ]
 
 { #category : #'services - file operations' }
