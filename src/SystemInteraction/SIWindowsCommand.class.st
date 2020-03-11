@@ -40,17 +40,18 @@ SIWindowsCommand class >> zipWindowExecutable [
 
 { #category : #'services - file operations' }
 SIWindowsCommand >> copyAll: inputDirectoryFileReference to: targetDirectoryFileReference [
-	"We add a \ character at the end of the target path, so that xcopy does not prompt the user (is it a file or a directory ?)
-	The /Y allows to force overwrite"
+	"see: https://docs.microsoft.com/fr-fr/windows-server/administration/windows-commands/robocopy"
 
 	^ self
-		waitForCommand: 'xcopy'
-		arguments: {'/E' . '/Y' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand . (targetDirectoryFileReference asAbsolute pathString , '\') escapedPathForSystemCommand}
+		waitForCommand: 'robocopy'
+		arguments: {'/e' . '/s' . inputDirectoryFileReference escapedPathForSystemCommand . targetDirectoryFileReference escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }
 SIWindowsCommand >> deleteAll: inputDirectoryFileReference [
-	^ self waitForCommand: 'rd' arguments: {'/s' . '/q' . inputDirectoryFileReference asAbsolute escapedPathForSystemCommand}
+	^ inputDirectoryFileReference isFile
+		ifTrue: [ self waitForCommand: 'del' arguments: {'/s' . '/q' . inputDirectoryFileReference escapedPathForSystemCommand} ]
+		ifFalse: [ self waitForCommand: 'rd' arguments: {'/s' . '/q' . inputDirectoryFileReference escapedPathForSystemCommand} ]
 ]
 
 { #category : #private }
@@ -77,7 +78,7 @@ SIWindowsCommand >> unzip: anArchive to: targetDirectory [
 	command := self systemInteractionResourcesFolder / 'unzip.exe'.
 	command exists ifFalse: [ command binaryWriteStreamDo: [ :s | s nextPutAll: self class unzipWindowExecutable ] ].
 	^ self
-		waitForCommand: command escapePathForSystemCommand
+		waitForCommand: command escapedPathForSystemCommand
 		arguments: {'-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
 ]
 
@@ -90,5 +91,5 @@ SIWindowsCommand >> zip: aCollectionOfFilesOrPath to: aZipArchiveName [
 	arguments := OrderedCollection with: '-roq' with: aZipArchiveName.
 	arguments addAll: (aCollectionOfFilesOrPath collect: #escapedPathForSystemCommand).
 
-	self waitForCommand: command escapePathForSystemCommand arguments: arguments asArray silently: true
+	self waitForCommand: command escapedPathForSystemCommand arguments: arguments asArray silently: true
 ]

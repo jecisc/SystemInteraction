@@ -314,7 +314,7 @@ SICommand >> waitForCommand: aString arguments: aCollection silently: aBoolean [
 		execute: [ aBoolean
 				ifTrue: [ self privateSilentWaitForCommand: aString arguments: aCollection ]
 				ifFalse: [ result := self privateWaitForCommand: aString arguments: aCollection ] ]
-		recordedAs: 'Execute command: ' , (self joinCommand: aString withArguments: aCollection).
+		loggedAs: 'Execute command: ' , (self joinCommand: aString withArguments: aCollection).
 
 	aBoolean ifFalse: [ self loggingStrategy trace: ('Result: ' , result asString ifEmpty: [ 'No result' ]) ].
 	^ result
