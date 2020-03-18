@@ -34,6 +34,7 @@ SIUnixCommand >> deleteAll: inputDirectoryFileReference [
 SIUnixCommand >> privateExecuteCommand: aString arguments: aCollection [
 	OSSUnixSubprocess new
 		shellCommand: (self joinCommand: aString withArguments: aCollection);
+		addAllEnvVariablesFromParentWithoutOverride;
 		run
 ]
 
@@ -55,6 +56,7 @@ SIUnixCommand >> privateWaitForCommand: aString arguments: aCollection [
 		shellCommand: (self joinCommand: aString withArguments: aCollection);
 		redirectStdout;
 		redirectStderr;
+		addAllEnvVariablesFromParentWithoutOverride;
 		runAndWaitPollingEvery: (Delay forMilliseconds: 50) retrievingStreams: true onExitDo: [ :process :out :err | ^ out ]
 ]
 
