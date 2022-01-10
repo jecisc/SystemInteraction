@@ -79,7 +79,7 @@ SIWindowsCommand >> unzip: anArchive to: targetDirectory [
 	command exists ifFalse: [ command binaryWriteStreamDo: [ :s | s nextPutAll: self class unzipWindowExecutable ] ].
 	^ self
 		waitForCommand: command escapedPathForSystemCommand
-		arguments: {'-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
+		arguments: {'--quiet'. '-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }

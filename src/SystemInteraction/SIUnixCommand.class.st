@@ -62,7 +62,7 @@ SIUnixCommand >> privateWaitForCommand: aString arguments: aCollection [
 
 { #category : #'services - file operations' }
 SIUnixCommand >> unzip: anArchive to: targetDirectory [
-	^ self waitForCommand: 'unzip' arguments: {'-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
+	^ self waitForCommand: 'unzip' arguments: { '--quiet'. '-o' . anArchive escapedPathForSystemCommand . '-d' . targetDirectory escapedPathForSystemCommand}
 ]
 
 { #category : #'services - file operations' }
