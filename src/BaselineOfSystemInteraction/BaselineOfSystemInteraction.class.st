@@ -36,7 +36,7 @@ BaselineOfSystemInteraction >> osSubProcess: spec [
 		baseline: 'OSSubprocess'
 		with: [ spec
 				loads: 'Core';
-				repository: 'github://pharo-contributions/OSSubprocess:v1.3.0/repository' ]
+				repository: 'github://pharo-contributions/OSSubprocess:master/repository' ]
 ]
 
 { #category : #dependencies }
