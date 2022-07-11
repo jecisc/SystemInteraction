@@ -43,7 +43,7 @@ BaselineOfSystemInteraction >> osSubProcess: spec [
 BaselineOfSystemInteraction >> osWinSubProcess: spec [
 	spec
 		baseline: 'OSWinSubprocess' with: [
-			spec repository: 'github://pharo-contributions/OSWinSubprocess:v1/repository' ]
+			spec repository: 'github://pharo-contributions/OSWinSubprocess/repository' ]
 ]
 
 { #category : #accessing }
